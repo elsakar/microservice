@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsarapp-deployment
+  labels:
+    app: tsarapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tsarapp
+  template:
+    metadata:
+      labels:
+        app: tsarapp
+    spec:
+      containers:
+      - name: tsarapp
+        image: xmaeltht/nginx #elsakar/challenge-entry:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tsarapp
+spec:
+  type: NodePort
+  selector:
+    app: tsarapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
